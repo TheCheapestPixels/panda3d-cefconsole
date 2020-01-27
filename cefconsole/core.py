@@ -72,19 +72,20 @@ class PythonSubconsole(Subconsole):
 
 
 def add_console(*args, console_open=False, render_immediately=False,
-                toggle='f9', subconsoles=None, **kwargs):
+                toggle=None, subconsoles=None, **kwargs):
     base.console_open = console_open
     base.console = Console(*args, **kwargs)
     if not base.console_open:
         base.console.node().hide()
 
-    def toggle_console():
-        base.console_open = not base.console_open
-        if base.console_open:
-            base.console.node().show()
-        else:
-            base.console.node().hide()
-    base.accept(toggle, toggle_console)
+    if toggle is not None:
+        def toggle_console():
+            base.console_open = not base.console_open
+            if base.console_open:
+                base.console.node().show()
+            else:
+                base.console.node().hide()
+        base.accept(toggle, toggle_console)
 
     if subconsoles is not None:
         for sc in subconsoles:
